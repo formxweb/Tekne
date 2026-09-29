@@ -11,7 +11,15 @@ npm install
 npm run dev       # local dev server
 npm run build     # static build → dist/
 npm run preview   # serve the build
+npm run build:inline   # copy-paste variant → dist-inline/ (see below)
 ```
+
+`build:inline` writes each page as a single HTML file with its CSS and JS
+inside. Media, fonts and icons stay as separate files next to it, with no
+Base64. All paths are relative, and `_headers`/`vercel.json` are regenerated
+with the SHA-256 hashes of the inline blocks, so the strict CSP still holds.
+Rerun it after any code change. Opened by double-click (`file://`), browsers
+block the web fonts; on any web server everything works.
 
 `dist/` is a static site. Deploy it with Vercel (`vercel.json`), Netlify or
 Cloudflare Pages (`netlify.toml` + `public/_headers`), or any static host.
