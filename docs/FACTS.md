@@ -33,4 +33,6 @@ Nothing else is claimed. **Check the items marked ⚠︎ before launch.**
 Every image on the site is a frame from the supplied film
 `public/videos/marmara-blue-hero.mp4` (720×1280, 17 s), extracted by
 `scripts/extract-stills.py`. Timecodes shown on the page are the real
-source timecodes (30 fps).
+source timecodes (30 fps). The film is published without its audio track.
+
+See also `docs/YAYIN-ONCESI.md` (Turkish launch checklist).

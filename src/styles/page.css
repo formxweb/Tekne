@@ -67,4 +67,4 @@
   display: grid;
   align-content: center;
 }
-.page__404 .page__title { font-size: clamp(48px, 12vw, 180px); }
+.page__404 .page__title { font-size: clamp(40px, 8.4vw, 150px); }
