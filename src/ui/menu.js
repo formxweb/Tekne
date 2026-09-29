@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { STILL_TC } from '../data/film.js';
+import { STILL_TC, still } from '../data/film.js';
 
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -56,7 +56,7 @@ export function createMenu({ onGo, lenis }) {
   dialog.querySelectorAll('[data-preview]').forEach((a) => {
     const show = () => {
       const name = a.dataset.preview;
-      img.src = `/images/stills/${name}-480.jpg`;
+      img.src = still(name, 480);
       tcEl.textContent = `TC ${STILL_TC[name] ?? ''}`;
     };
     a.addEventListener('pointerenter', show);

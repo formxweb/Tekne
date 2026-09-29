@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { SHOTS, FILM_SRC } from '../data/film.js';
+import { SHOTS, FILM_SRC, still } from '../data/film.js';
 import { tc } from '../lib/tc.js';
 
 /**
@@ -29,7 +29,7 @@ export function createViewer({ film, lenis }) {
     shot = SHOTS[key];
     if (!shot) return;
     titleEl.textContent = shot.title;
-    v.poster = `/images/stills/${key}-720.jpg`;
+    v.poster = still(key);
     v.muted = !sound;
     if (!v.getAttribute('src')) {
       v.preload = 'auto';

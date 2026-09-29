@@ -21,4 +21,13 @@ export const STILL_TC = {
   night: '00:00:11:21',
 };
 
-export const FILM_SRC = '/videos/marmara-blue-hero.mp4';
+/*
+ * The single-file build (npm run build:single) embeds the film and stills and
+ * exposes them on window; the normal build uses the files in /public.
+ */
+const embedded = typeof window !== 'undefined' ? window : {};
+
+export const FILM_SRC = embedded.__MB_FILM__ || '/videos/marmara-blue-hero.mp4';
+
+export const still = (name, w = 720) =>
+  embedded.__MB_STILLS__?.[name] ?? `/images/stills/${name}-${w}.jpg`;

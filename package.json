@@ -3,11 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Marmara Blue — digital experience. Bosphorus, Istanbul.",
+  "description": "Marmara Blue \u2014 digital experience. Bosphorus, Istanbul.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:single": "MB_SINGLE=1 vite build && node scripts/build-single.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",

@@ -11,7 +11,12 @@ npm install
 npm run dev       # local dev server
 npm run build     # static build → dist/
 npm run preview   # serve the build
+npm run build:single   # one self-contained HTML → dist-single/marmara-blue.html
 ```
+
+`build:single` embeds the film, the stills, the fonts and the code into a single
+HTML file of about 9 MB. It opens with a double-click (`file://`), with no
+server needed, which makes it handy for sharing a preview.
 
 `dist/` is a static site, so it can be deployed to any static host. The canonical URL is
 set to `https://marmara.blue/`.

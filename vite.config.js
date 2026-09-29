@@ -17,6 +17,10 @@ function stills() {
         const cls = a.class ? ` class="${a.class}"` : '';
         const loading = a.loading ?? 'lazy';
         const prio = a.fetchpriority ? ` fetchpriority="${a.fetchpriority}"` : '';
+        // Single-file build: a bare <img>; its data URI is filled in at load time.
+        if (process.env.MB_SINGLE) {
+          return `<picture${cls}><img data-still="${name}" width="720" height="1280" alt="${alt}" decoding="async"></picture>`;
+        }
         const set = (ext) =>
           `/images/stills/${name}-480.${ext} 480w, /images/stills/${name}-720.${ext} 720w`;
         return (
@@ -35,6 +39,7 @@ function stills() {
 export default defineConfig({
   plugins: [stills()],
   build: {
+    outDir: process.env.MB_SINGLE ? 'dist-single' : 'dist',
     target: 'es2019',
     assetsInlineLimit: 0,
     cssCodeSplit: false,
