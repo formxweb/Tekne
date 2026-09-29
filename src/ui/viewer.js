@@ -6,7 +6,7 @@ import { tc } from '../lib/tc.js';
  * "VIEW MOMENT": every still is a frame of the film, so opening one plays the
  * film from that shot and loops inside it.
  */
-export function createViewer({ film, lenis }) {
+export function createViewer() {
   const dialog = document.getElementById('viewer');
   const v = dialog.querySelector('[data-viewer-film]');
   const titleEl = dialog.querySelector('[data-viewer-title]');
@@ -36,7 +36,7 @@ export function createViewer({ film, lenis }) {
       v.src = FILM_SRC;
     }
     dialog.showModal();
-    lenis?.stop();
+    document.documentElement.style.overflow = 'hidden';
     const start = () => {
       v.currentTime = shot.at;
       const p = v.play();
@@ -57,7 +57,7 @@ export function createViewer({ film, lenis }) {
     v.pause();
     cancelAnimationFrame(raf);
     dialog.close();
-    lenis?.start();
+    document.documentElement.style.overflow = '';
   }
 
   document.addEventListener('click', (e) => {

@@ -8,17 +8,12 @@ Marmara Blue's own film is the only source of imagery. We don't dress it up
 with stock photography. We **hold its frames**, the way an editor stops a reel
 on the flatbed: we crop them, enlarge them and annotate them.
 
-The site is built like a film being taken apart and put back together:
+The film plays behind the whole page and **never stops**. It is fixed in place;
+the page scrolls over it. Type sits on top of the film; content pages are
+translucent midnight panels, so the film keeps moving faintly behind them. At
+the end, the panels open up again and *LET'S GO.* sits directly on the film.
 
-1. **Play**: the reel runs full-bleed, almost silent.
-2. **Hold**: the first scroll freezes the reel. The frozen frame becomes a
-   surface the typography can move across.
-3. **Split**: a single vertical hairline cuts the screen in two, Europe on one
-   side and Asia on the other. That hairline is the **Strait Line**, and it
-   comes back throughout the site.
-4. **Archive**: frames are pulled out, scattered on a light table, then lined
-   up again.
-5. **End credits**: darkness, then *LET'S GO.*
+Nothing transforms on scroll. Scrolling only moves the page.
 
 ## 2. Columns & Spans (the architecture)
 
@@ -82,43 +77,40 @@ No black and gold, no purple, no neon.
 
 ## 7. Motion principles
 
-Scroll is the primary interaction. Every motion has to *mean* something:
+Calm, not choreographed.
 
-| Motion | Meaning |
-| --- | --- |
-| Reel freezes on first scroll | "Hold this moment." |
-| Frame contracts, MARMARA passes behind it | The name moves through the Bosphorus, not over it. |
-| Screen splits on a vertical hairline | The strait: Europe / Asia. |
-| "BACKDROP" slides *behind* the photograph, "EXPERIENCE" lands *in front* | The Bosphorus is not the backdrop. |
-| Vertical scroll becomes horizontal travel | Moving along the shore, scene by scene. |
-| Scattered prints align into one strip | An archive becoming a film. |
+- **The film always plays.** It is `position: fixed` behind the page, muted
+  and looping, and it is never paused, frozen or scaled by scrolling.
+- **Nothing reacts to scroll.** There is no pinning, no scrubbing, no parallax,
+  no horizontal travel and no elements rearranging. Scrolling only moves the page.
+- **Motion happens once, on load.** ISTANBUL 41°N appears, then MARMARA / BLUE,
+  then the line of copy. After that the type stays still over the film.
+- **Interaction is by click only**, and it is always reversible: the index
+  menu, VIEW MOMENT (plays the film from that frame), the request form.
 
-Easing: `expo.out` for reveals, linear for scroll scrubs. No bounce, no elastic,
-no 3D flips, no glowing cursor.
+Easing: `expo.out`. No bounce, no elastic, no 3D flips, no glowing cursor.
 
-`prefers-reduced-motion`: no pinning and no scrubbing. The film does not
-autoplay; a **PLAY FILM** control is shown over the poster instead. Every
-chapter shows its final composition statically.
+`prefers-reduced-motion`: the film does not autoplay; a **PLAY FILM** control
+is shown over the poster instead, and the load animation is skipped.
 
 ## 8. Chapter score (01 / 07)
 
 | # | Chapter | Menu word | Composition |
 | --- | --- | --- | --- |
-| 01 | Opening | — | Full-bleed reel · ISTANBUL 41°N · MARMARA upper-left, BLUE crossing and cropped · freeze → contract → pass-behind → split |
-| 02 | The Strait | STORY | Dark · SOMEWHERE BETWEEN ASIA & EUROPE · column rises from a slit · BACKDROP behind / EXPERIENCE in front |
-| 03 | Experiences | EXPERIENCES | Horizontal travel. 01 WEDDINGS colossal column · 02 CORPORATE night diptych and vertical word · 03 PRIVATE span-dominant with an expanding print · 04 BRUNCH ivory morning manifest |
-| 04 | The Fleet | FLEET | Survey of KAPTAN-I DERYA 3 (name as painted on the stern) · fleet range **50 → 500** guests |
-| 05 | Moments | MOMENTS | Ivory light table: one huge, three tiny, one vertical → aligned film strip |
-| 06 | @marmara.blue | — | Giant handle · moving contact sheet with grease-pencil selects |
-| 07 | Let's go | CONTACT | End credits · READY TO LEAVE THE SHORE? · LET'S / GO. · request form appears only on interaction |
+| 01 | Opening | — | The film, fixed and playing · ISTANBUL 41°N · MARMARA upper-left, BLUE crossing and cropped · one line of copy and the request link |
+| 02 | The Strait | STORY | Translucent over the film · SOMEWHERE BETWEEN ASIA & EUROPE · BACKDROP behind the column, EXPERIENCE in front |
+| 03 | Experiences | EXPERIENCES | Four full-screen scenes, one after another. 01 WEDDINGS colossal column · 02 CORPORATE night diptych and vertical word · 03 PRIVATE span-dominant print · 04 BRUNCH ivory morning manifest |
+| 04 | The Fleet | FLEET | Catalogue page: survey of KAPTAN-I DERYA 3 (name as painted on the stern) beside the photograph · fleet range **50 → 500** guests |
+| 05 | Moments | MOMENTS | Ivory light table: one huge, three tiny, one vertical print |
+| 06 | @marmara.blue | — | Giant handle · contact sheet with grease-pencil selects |
+| 07 | Let's go | CONTACT | Directly on the film · READY TO LEAVE THE SHORE? · LET'S / GO. · request form appears only on interaction |
 
 ## 9. Mobile has its own direction (not a stacked desktop)
 
 - The vertical reel fits a phone natively. It is the whole screen.
 - MARMARA runs **up** the left edge; BLUE sits across the bottom, cropped.
-- The split becomes horizontal: navy above, photograph below.
 - Columns become full-screen portraits at native resolution.
-- Experiences stays a horizontal sequence, one scene per screen.
+- Experiences: one scene per screen.
 - The minimum text size is 11 px, and there is no horizontal overflow.
 
 ## 10. Truth rules

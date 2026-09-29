@@ -4,7 +4,7 @@ import { STILL_TC, still } from '../data/film.js';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Fullscreen index built on <dialog>: native focus trap, Esc, inert page. */
-export function createMenu({ onGo, lenis }) {
+export function createMenu({ onGo }) {
   const dialog = document.getElementById('menu');
   const openBtn = document.querySelector('[data-menu-open]');
   const closeBtn = dialog.querySelector('[data-menu-close]');
@@ -17,7 +17,7 @@ export function createMenu({ onGo, lenis }) {
     if (dialog.open) return;
     dialog.showModal();
     dialog.scrollLeft = 0;
-    lenis?.stop();
+    document.documentElement.style.overflow = 'hidden';
     if (reduced()) return;
     gsap.fromTo(dialog,
       { clipPath: 'inset(0% 0% 100% 0%)' },
@@ -33,7 +33,7 @@ export function createMenu({ onGo, lenis }) {
       busy = false;
       dialog.close();
       gsap.set(dialog, { clearProps: 'clipPath' });
-      lenis?.start();
+      document.documentElement.style.overflow = '';
       then?.();
     };
     if (reduced()) return done();

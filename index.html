@@ -140,35 +140,34 @@
     </div>
   </dialog>
 
+  <!-- ░░ THE FILM — fixed behind the whole page, never stops on scroll ░░ -->
+  <div class="film-layer" aria-hidden="true">
+    <video class="film-layer__video" id="film"
+           autoplay muted loop playsinline preload="metadata"
+           poster="/images/marmara-blue-poster.jpg"
+           disablepictureinpicture disableremoteplayback>
+      <source src="/videos/marmara-blue-hero.mp4" type="video/mp4">
+    </video>
+    <script>
+      /* Reduced motion: never autoplay. The poster stays; a PLAY FILM control is offered. */
+      (function (v) {
+        v.muted = true; v.defaultMuted = true;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.autoplay = false; }
+      })(document.getElementById('film'));
+    </script>
+    <div class="film-layer__shade"></div>
+  </div>
+
   <main id="main">
 
     <!-- ═══════════════════════════════════════════════════════════════
          01 — OPENING · the reel plays, then is held
          ═══════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════════════════════
+         01 — OPENING · type over the film
+         ═══════════════════════════════════════════════════════════════ -->
     <section class="opening" id="top" data-chapter="01" data-label="Opening" aria-labelledby="opening-title">
       <div class="opening__stage stage">
-        <p class="opening__span t-span" aria-hidden="true">Marmara</p>
-
-        <div class="opening__plate" data-plate>
-          <div class="opening__zoom" data-zoom>
-            <video class="opening__film" id="film"
-                   autoplay muted loop playsinline preload="metadata"
-                   poster="/images/marmara-blue-poster.jpg"
-                   disablepictureinpicture disableremoteplayback
-                   aria-label="Marmara Blue filmi: Boğaz'da ilerleyen tekne, güvertede düğün, gün batımında halay ve gece kutlaması">
-              <source src="/videos/marmara-blue-hero.mp4" type="video/mp4">
-            </video>
-            <script>
-              /* Reduced motion: never autoplay. The poster stays; a PLAY FILM control is offered. */
-              (function (v) {
-                v.muted = true; v.defaultMuted = true;
-                if (matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.autoplay = false; }
-              })(document.getElementById('film'));
-            </script>
-          </div>
-          <div class="opening__shade" aria-hidden="true"></div>
-        </div>
-
         <p class="opening__city t-meta" lang="en" data-city>
           <span class="ln"><span>Istanbul</span></span>
           <span class="ln"><span>41°N</span></span>
@@ -179,20 +178,17 @@
           <span class="opening__blue t-span"><span class="mask"><span class="in">Blue</span></span></span>
         </h1>
 
+        <div class="opening__intro" data-intro>
+          <p class="opening__lead">Boğaz'da teknede nikah, düğün, kurumsal etkinlik ve özel kutlamalar.</p>
+          <a class="scene__cta t-meta" href="#contact" data-request="">Etkinlik talebi <i aria-hidden="true">→</i></a>
+        </div>
+
         <div class="opening__foot">
           <p class="t-meta opening__place" lang="en">Bosphorus / Turkey</p>
           <p class="opening__scroll t-meta" aria-hidden="true" lang="en"><i></i><span>Scroll</span></p>
           <p class="opening__tc t-meta" aria-hidden="true"><span class="opening__rec"></span>TC <span data-tc>00:00:00:00</span></p>
           <button class="opening__toggle t-meta" type="button" data-film-toggle aria-pressed="false" lang="en">Pause film</button>
         </div>
-
-        <div class="opening__bars" aria-hidden="true"><i data-bar></i><i data-bar></i></div>
-        <div class="opening__strait" aria-hidden="true" data-strait>
-          <i class="strait-line"></i>
-          <span class="t-meta opening__eu" lang="en">Europe</span>
-          <span class="t-meta opening__as" lang="en">Asia</span>
-        </div>
-        <p class="opening__held t-meta" aria-hidden="true" lang="en" data-held>Frame held · TC <span data-held-tc>00:00:00:00</span></p>
       </div>
     </section>
 
@@ -239,7 +235,6 @@
           <div class="xp__intro">
             <h2 class="xp__title t-col" id="xp-title" lang="en">Experiences</h2>
             <p class="xp__meta t-meta" lang="en"><span>03 / 07</span><span>Four scenes</span><span>on the water</span></p>
-            <p class="xp__hint t-meta" lang="en" aria-hidden="true">Keep scrolling <i></i></p>
           </div>
 
           <!-- Scene 01 · WEDDINGS — colossal column, word in front -->
@@ -342,16 +337,6 @@
               <a class="scene__cta t-meta" href="#contact" data-request="Teknede kahvaltı">Etkinlik talebi <i aria-hidden="true">→</i></a>
             </div>
           </article>
-
-          <div class="xp__outro" aria-hidden="true">
-            <p class="t-meta" lang="en"><span>Next</span><span>04 — The fleet</span></p>
-            <i class="xp__arrow"></i>
-          </div>
-        </div>
-
-        <div class="xp__hud t-meta" aria-hidden="true" lang="en">
-          <span>Scene <b data-scene-now>01</b> / 04</span>
-          <span class="xp__bar"><i data-xp-bar></i></span>
         </div>
       </div>
     </section>
@@ -360,41 +345,35 @@
          04 — THE FLEET · a surveyed vessel, not a boat card
          ═══════════════════════════════════════════════════════════════ -->
     <section class="fleet" id="fleet" data-chapter="04" data-label="Fleet" aria-labelledby="fleet-title">
-      <div class="fleet__stage stage">
-        <h2 class="fleet__title" id="fleet-title" lang="en" data-fleet-title>
-          <span class="t-meta">The</span><span class="t-span">Fleet</span>
-        </h2>
-        <p class="fleet__kicker t-meta" lang="en" data-fleet-kicker><span>04 / 07</span><span>A virtual catalogue</span></p>
+      <div class="fleet__inner">
+        <div class="fleet__text">
+          <p class="fleet__kicker t-meta" lang="en"><span>04 / 07</span><span>A virtual catalogue</span></p>
+          <h2 class="fleet__title" id="fleet-title" lang="en">
+            <span class="t-meta">The</span><span class="t-span">Fleet</span>
+          </h2>
+          <h3 class="fleet__name t-col">Kaptan-ı Derya 3</h3>
 
-        <div class="fleet__photo" data-fleet-photo>
-          <div class="fleet__move" data-fleet-move>
-            <button class="frame-btn" type="button" data-moment="wake" data-cursor="Discover" aria-label="Anı izle: Kaptan-ı Derya 3 Boğaz'da ilerliyor">
-              <mb-still name="wake" alt="Kaptan-ı Derya 3 teknesi, arkasında köpüklü bir iz bırakarak Boğaz'da ilerliyor; kıçında teknenin adı yazıyor" sizes="100vw" />
-            </button>
-            <ul class="fleet__marks" aria-hidden="true">
-              <li class="mark" data-mark="name" data-x="0.468" data-y="0.664"><i></i></li>
-              <li class="mark" data-mark="type" data-x="0.47" data-y="0.49"><i></i></li>
-              <li class="mark" data-mark="loc" data-x="0.78" data-y="0.60"><i></i></li>
-            </ul>
+          <dl class="fleet__survey t-meta">
+            <div><dt lang="en">Name</dt><dd>Kaptan-ı Derya 3<small lang="en">As painted on the stern</small></dd></div>
+            <div><dt lang="en">Type</dt><dd lang="en">Event boat</dd></div>
+            <div><dt lang="en">Location</dt><dd lang="en">Bosphorus, Istanbul</dd></div>
+            <div><dt lang="en">Capacity</dt><dd lang="en">On request</dd></div>
+          </dl>
+
+          <div class="fleet__range">
+            <p class="fleet__nums t-span" aria-label="50 ile 500 misafir"><span>50</span><i aria-hidden="true"></i><span>500</span></p>
+            <p class="t-meta" lang="en">Guests — across the fleet</p>
+            <p class="fleet__note">Farklı kapasitelerdeki teknelerimiz genellikle 50 ile 500 misafir arasında ağırlar. Etkinliğinize uygun tekne için bize yazın.</p>
+            <a class="scene__cta t-meta" href="#contact" data-request="">Tekne sor <i aria-hidden="true">→</i></a>
           </div>
-          <div class="fleet__shade" aria-hidden="true"></div>
         </div>
 
-        <h3 class="fleet__name t-col" data-fleet-name>Kaptan-ı Derya 3</h3>
-
-        <dl class="fleet__survey t-meta" data-survey>
-          <div data-for="name"><dt lang="en">Name</dt><dd>Kaptan-ı Derya 3<small lang="en">As painted on the stern</small></dd></div>
-          <div data-for="type"><dt lang="en">Type</dt><dd lang="en">Event boat</dd></div>
-          <div data-for="loc"><dt lang="en">Location</dt><dd lang="en">Bosphorus, Istanbul</dd></div>
-          <div data-for="cap"><dt lang="en">Capacity</dt><dd lang="en">On request</dd></div>
-        </dl>
-
-        <div class="fleet__range" data-range>
-          <p class="fleet__nums t-span" aria-label="50 ile 500 misafir"><span>50</span><i aria-hidden="true"></i><span>500</span></p>
-          <p class="t-meta" lang="en">Guests — across the fleet</p>
-          <p class="fleet__note">Farklı kapasitelerdeki teknelerimiz genellikle 50 ile 500 misafir arasında ağırlar. Etkinliğinize uygun tekne için bize yazın.</p>
-          <a class="scene__cta t-meta" href="#contact" data-request="">Tekne sor <i aria-hidden="true">→</i></a>
-        </div>
+        <figure class="fleet__photo">
+          <button class="frame-btn" type="button" data-moment="wake" data-cursor="Discover" aria-label="Anı izle: Kaptan-ı Derya 3 Boğaz'da ilerliyor">
+            <mb-still name="wake" alt="Kaptan-ı Derya 3 teknesi, arkasında köpüklü bir iz bırakarak Boğaz'da ilerliyor; kıçında teknenin adı yazıyor" sizes="(max-width: 760px) 100vw, 50vw" />
+          </button>
+          <figcaption class="t-meta col__cap" lang="en">TC 00:00:00:27 · Bosphorus</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -444,8 +423,6 @@
             <p class="print__cap t-meta" lang="en"><span>Leaving the frame</span><span>TC 00:00:16:21</span><span>Bosphorus</span></p>
           </li>
         </ol>
-
-        <p class="moments__end t-meta" lang="en" data-moments-end><span>The archive,</span><span>aligned.</span></p>
       </div>
     </section>
 

@@ -1,19 +1,15 @@
 import { tc } from '../lib/tc.js';
 
 /**
- * The hero reel. Autoplays muted and inline; if the browser refuses (low-power
- * mode, data saver, reduced motion) the poster stays and PLAY FILM is offered.
- * The first scroll "holds" the frame: hold()/release() pause and resume it.
+ * The film behind the page. Autoplays muted and inline and keeps playing
+ * while you scroll. If the browser refuses (low-power mode, data saver,
+ * reduced motion) the poster stays and PLAY FILM is offered.
  */
 export function createFilm(root) {
-  const video = root.querySelector('#film');
+  const video = document.getElementById('film');
   const toggle = root.querySelector('[data-film-toggle]');
   const tcEl = root.querySelector('[data-tc]');
-  const heldTc = root.querySelector('[data-held-tc]');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  let userPaused = reduce;
-  let held = false;
   let raf = 0;
 
   video.muted = true;
@@ -66,14 +62,8 @@ export function createFilm(root) {
   if (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) fail();
 
   toggle.addEventListener('click', () => {
-    if (video.paused) {
-      userPaused = false;
-      held = false;
-      play();
-    } else {
-      userPaused = true;
-      video.pause();
-    }
+    if (video.paused) play();
+    else video.pause();
   });
 
   if (!reduce) play();
@@ -81,19 +71,6 @@ export function createFilm(root) {
 
   return {
     video,
-    /** Freeze the current frame (first scroll). */
-    hold() {
-      if (held) return;
-      held = true;
-      heldTc.textContent = tc(video.currentTime);
-      if (!video.paused) video.pause();
-    },
-    /** Back at the top: let the reel run again unless the viewer paused it. */
-    release() {
-      if (!held) return;
-      held = false;
-      if (!userPaused) play();
-    },
     whenPlaying(cb, timeout = 1800) {
       let done = false;
       const go = () => { if (!done) { done = true; cb(); } };
