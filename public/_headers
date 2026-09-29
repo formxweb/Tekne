@@ -1,0 +1,35 @@
+# Security + caching headers for Netlify and Cloudflare Pages (copied to dist/).
+# Keep in sync with vercel.json. CSP notes:
+#  - no inline scripts or inline style attributes exist, so no 'unsafe-inline';
+#  - googletagmanager / google-analytics are allowed only so GA4 works once a
+#    real ID (VITE_GA4_ID) is set and the visitor consents; nothing loads before;
+#  - WhatsApp / Instagram are plain outbound links and need no CSP entry.
+# HSTS deliberately has no includeSubDomains: add it once every marmara.blue
+# subdomain is confirmed to serve HTTPS.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()
+  Cross-Origin-Opener-Policy: same-origin
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Font files never change in place (a new font gets a new file name).
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=2592000
+
+/videos/*
+  Cache-Control: public, max-age=2592000
+
+/icons/*
+  Cache-Control: public, max-age=2592000
+
+/og/*
+  Cache-Control: public, max-age=2592000

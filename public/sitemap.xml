@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Only indexable pages. The legal pages are drafts (noindex) and are added
+     here once their real text is published. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://marmara.blue/</loc>

@@ -1,14 +1,25 @@
-import { gsap } from 'gsap';
-
 /** A small label that trails the pointer over media: VIEW MOMENT, EXPLORE, DISCOVER. */
 export function createCursor() {
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const tag = document.querySelector('[data-cursor-tag]');
+  if (!tag) return;
   const label = tag.firstElementChild;
-  const xTo = gsap.quickTo(tag, 'x', { duration: 0.5, ease: 'power3' });
-  const yTo = gsap.quickTo(tag, 'y', { duration: 0.5, ease: 'power3' });
+  let x = 0;
+  let y = 0;
+  let queued = false;
 
-  window.addEventListener('pointermove', (e) => { xTo(e.clientX); yTo(e.clientY); }, { passive: true });
+  // One style write per frame; the CSS transition provides the trailing ease.
+  window.addEventListener('pointermove', (e) => {
+    x = e.clientX;
+    y = e.clientY;
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      tag.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+  }, { passive: true });
+
   document.addEventListener('pointerover', (e) => {
     const t = e.target.closest('[data-cursor]');
     if (t) {

@@ -1,5 +1,5 @@
 /**
- * The seven shots of the supplied film (cuts detected with ffmpeg's scene filter).
+ * The seven shots of the film (cuts detected with ffmpeg's scene filter).
  * "View moment" plays the film between `start` and `end`, starting at `at`.
  */
 export const SHOTS = {
@@ -9,7 +9,7 @@ export const SHOTS = {
   silk:    { start: 6.433,  end: 8.533,  at: 6.45, title: 'Pink silk, sunset' },
   festoon: { start: 8.533,  end: 10.6,   at: 8.55, title: 'Festoon light' },
   night:   { start: 10.6,   end: 13.767, at: 10.6, title: 'Night, applause' },
-  aerial:  { start: 13.767, end: 16.95,  at: 13.8, title: 'Under the bridge' },
+  aerial:  { start: 13.767, end: 16.85,  at: 13.8, title: 'Under the bridge' },
 };
 
 /** Timecode of each still, for the index preview. */
@@ -21,13 +21,6 @@ export const STILL_TC = {
   night: '00:00:11:21',
 };
 
-/*
- * The single-file build (npm run build:single) embeds the film and stills and
- * exposes them on window; the normal build uses the files in /public.
- */
-const embedded = typeof window !== 'undefined' ? window : {};
+export const FILM_SRC = '/videos/marmara-blue-hero.mp4';
 
-export const FILM_SRC = embedded.__MB_FILM__ || '/videos/marmara-blue-hero.mp4';
-
-export const still = (name, w = 720) =>
-  embedded.__MB_STILLS__?.[name] ?? `/images/stills/${name}-${w}.jpg`;
+export const still = (name, w = 720) => `/images/stills/${name}-${w}.webp`;

@@ -1,9 +1,10 @@
-import { gsap } from 'gsap';
 import { STILL_TC, still } from '../data/film.js';
+import { EXPO_IN_OUT, EXPO_OUT, reducedMotion, lockScroll } from '../lib/motion.js';
 
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/** Fullscreen index built on <dialog>: native focus trap, Esc, inert page. */
+/**
+ * Fullscreen index on a native modal <dialog>: focus is trapped, the page
+ * behind is inert, Esc closes, and focus returns to the button that opened it.
+ */
 export function createMenu({ onGo }) {
   const dialog = document.getElementById('menu');
   const openBtn = document.querySelector('[data-menu-open]');
@@ -17,14 +18,17 @@ export function createMenu({ onGo }) {
     if (dialog.open) return;
     dialog.showModal();
     dialog.scrollLeft = 0;
-    document.documentElement.style.overflow = 'hidden';
-    if (reduced()) return;
-    gsap.fromTo(dialog,
-      { clipPath: 'inset(0% 0% 100% 0%)' },
-      { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'expo.inOut' });
-    gsap.fromTo(words,
-      { yPercent: 105 },
-      { yPercent: 0, duration: 1.2, ease: 'expo.out', stagger: 0.06, delay: 0.3 });
+    lockScroll(true);
+    openBtn.setAttribute('aria-expanded', 'true');
+    if (reducedMotion()) return;
+    dialog.animate(
+      [{ clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)' }],
+      { duration: 900, easing: EXPO_IN_OUT },
+    );
+    words.forEach((w, i) => w.animate(
+      [{ transform: 'translateY(105%)' }, { transform: 'translateY(0)' }],
+      { duration: 1200, delay: 300 + i * 60, easing: EXPO_OUT, fill: 'backwards' },
+    ));
   }
 
   function close(then) {
@@ -32,13 +36,18 @@ export function createMenu({ onGo }) {
     const done = () => {
       busy = false;
       dialog.close();
-      gsap.set(dialog, { clearProps: 'clipPath' });
-      document.documentElement.style.overflow = '';
-      then?.();
+      lockScroll(false);
+      openBtn.setAttribute('aria-expanded', 'false');
+      if (then) then();
+      else openBtn.focus();
     };
-    if (reduced()) return done();
+    if (reducedMotion()) return done();
     busy = true;
-    gsap.to(dialog, { clipPath: 'inset(100% 0% 0% 0%)', duration: 0.75, ease: 'expo.inOut', onComplete: done });
+    const anim = dialog.animate(
+      [{ clipPath: 'inset(0% 0% 0% 0%)' }, { clipPath: 'inset(100% 0% 0% 0%)' }],
+      { duration: 750, easing: EXPO_IN_OUT, fill: 'forwards' },
+    );
+    anim.onfinish = () => { done(); anim.cancel(); };
   }
 
   openBtn.addEventListener('click', open);
@@ -62,6 +71,4 @@ export function createMenu({ onGo }) {
     a.addEventListener('pointerenter', show);
     a.addEventListener('focus', show);
   });
-
-  return { open, close };
 }

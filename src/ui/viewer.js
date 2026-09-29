@@ -1,21 +1,22 @@
-import { gsap } from 'gsap';
 import { SHOTS, FILM_SRC, still } from '../data/film.js';
 import { tc } from '../lib/tc.js';
+import { EXPO_OUT, reducedMotion, lockScroll } from '../lib/motion.js';
 
 /**
  * "VIEW MOMENT": every still is a frame of the film, so opening one plays the
- * film from that shot and loops inside it.
+ * film from that shot and loops inside it. Native modal <dialog>: Esc closes
+ * and focus returns to the frame that opened it.
  */
 export function createViewer() {
   const dialog = document.getElementById('viewer');
   const v = dialog.querySelector('[data-viewer-film]');
   const titleEl = dialog.querySelector('[data-viewer-title]');
   const tcEl = dialog.querySelector('[data-viewer-tc]');
-  const soundBtn = dialog.querySelector('[data-viewer-sound]');
   const closeBtn = dialog.querySelector('[data-viewer-close]');
+  const frame = dialog.querySelector('.viewer__frame');
   let shot = null;
   let raf = 0;
-  let sound = false;
+  let opener = null;
 
   const loop = () => {
     if (shot && (v.currentTime >= shot.end - 0.05 || v.currentTime < shot.start - 0.1)) {
@@ -25,39 +26,47 @@ export function createViewer() {
     raf = requestAnimationFrame(loop);
   };
 
+  const start = () => {
+    if (!shot || !dialog.open) return;
+    v.currentTime = shot.at;
+    const p = v.play();
+    if (p && p.catch) p.catch(() => { /* the poster frame stays; nothing to recover */ });
+  };
+
   function open(key) {
-    shot = SHOTS[key];
-    if (!shot) return;
+    const next = SHOTS[key];
+    if (!next || dialog.open) return;
+    shot = next;
+    opener = document.activeElement;
     titleEl.textContent = shot.title;
+    v.setAttribute('aria-label', `Film: ${shot.title}`);
     v.poster = still(key);
-    v.muted = !sound;
     if (!v.getAttribute('src')) {
       v.preload = 'auto';
       v.src = FILM_SRC;
+      v.addEventListener('loadedmetadata', start);
     }
     dialog.showModal();
-    document.documentElement.style.overflow = 'hidden';
-    const start = () => {
-      v.currentTime = shot.at;
-      const p = v.play();
-      if (p && p.catch) p.catch(() => {});
-    };
+    lockScroll(true);
     if (v.readyState >= 1) start();
-    else v.addEventListener('loadedmetadata', start, { once: true });
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(loop);
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      gsap.fromTo(dialog.querySelector('.viewer__frame'),
-        { clipPath: 'inset(46% 40% 46% 40%)' },
-        { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'expo.out' });
+    if (!reducedMotion()) {
+      frame.animate(
+        [{ clipPath: 'inset(46% 40% 46% 40%)' }, { clipPath: 'inset(0% 0% 0% 0%)' }],
+        { duration: 900, easing: EXPO_OUT },
+      );
     }
   }
 
   function close() {
+    if (!dialog.open) return;
     v.pause();
     cancelAnimationFrame(raf);
+    raf = 0;
     dialog.close();
-    document.documentElement.style.overflow = '';
+    lockScroll(false);
+    if (opener && opener.isConnected) opener.focus();
   }
 
   document.addEventListener('click', (e) => {
@@ -70,12 +79,4 @@ export function createViewer() {
   dialog.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
   closeBtn.addEventListener('click', close);
   dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
-  soundBtn.addEventListener('click', () => {
-    sound = !sound;
-    v.muted = !sound;
-    soundBtn.textContent = sound ? 'Sound on' : 'Sound off';
-    soundBtn.setAttribute('aria-pressed', String(sound));
-  });
-
-  return { open, close };
 }

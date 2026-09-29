@@ -1,0 +1,70 @@
+/* Secondary pages (legal, 404): same system, no JavaScript. */
+@import './fonts.css';
+@import './base.css';
+
+.page { background: var(--midnight); }
+
+.page__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: max(var(--gut), var(--safe-t)) max(var(--gut), var(--safe-r)) 0 max(var(--gut), var(--safe-l));
+}
+.page__head .hud__mark { color: var(--ivory); }
+
+.page__main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 10vh max(var(--gut), var(--safe-r)) 14vh max(var(--gut), var(--safe-l));
+}
+.page__kicker { color: var(--champagne); }
+.page__title {
+  margin: 14px 0 36px;
+  font-weight: 800;
+  font-stretch: 112%;
+  font-size: clamp(38px, 7.4vw, 96px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+.page__draft {
+  margin-bottom: 44px;
+  padding: 16px 18px;
+  border: 1px solid var(--champagne);
+  color: var(--ivory);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.page__draft strong { color: var(--champagne); }
+.page h2 {
+  margin: 44px 0 14px;
+  font-weight: 720;
+  font-stretch: 112%;
+  font-size: 21px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.page p,
+.page li {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ivory-2);
+}
+.page__main ul { list-style: disc; padding-left: 20px; display: grid; gap: 10px; }
+.page__main a { text-decoration: underline; text-underline-offset: 3px; color: var(--ivory); }
+.page__todo em {
+  color: var(--champagne);
+  font-style: normal;
+  font-family: var(--f-meta);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.page__404 {
+  min-height: 70vh;
+  display: grid;
+  align-content: center;
+}
+.page__404 .page__title { font-size: clamp(48px, 12vw, 180px); }

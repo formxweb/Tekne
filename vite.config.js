@@ -1,9 +1,11 @@
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 /**
  * <mb-still name="arch" alt="…" sizes="…" class="…" loading="lazy" />
- * expands at build time into a responsive <picture> (AVIF → WebP → JPEG),
- * so every frame from the film ships as static, crawlable markup.
+ * expands at build time into a responsive <picture> (AVIF → WebP) with
+ * srcset at 240/480/720 w, intrinsic width/height (no layout shift), lazy loading
+ * and async decoding, so every frame from the film ships as static markup.
  */
 function stills() {
   const attrRe = /([\w-]+)="([^"]*)"/g;
@@ -17,17 +19,12 @@ function stills() {
         const cls = a.class ? ` class="${a.class}"` : '';
         const loading = a.loading ?? 'lazy';
         const prio = a.fetchpriority ? ` fetchpriority="${a.fetchpriority}"` : '';
-        // Single-file build: a bare <img>; its data URI is filled in at load time.
-        if (process.env.MB_SINGLE) {
-          return `<picture${cls}><img data-still="${name}" width="720" height="1280" alt="${alt}" decoding="async"></picture>`;
-        }
         const set = (ext) =>
-          `/images/stills/${name}-480.${ext} 480w, /images/stills/${name}-720.${ext} 720w`;
+          [240, 480, 720].map((w) => `/images/stills/${name}-${w}.${ext} ${w}w`).join(', ');
         return (
           `<picture${cls}>` +
           `<source type="image/avif" srcset="${set('avif')}" sizes="${sizes}">` +
-          `<source type="image/webp" srcset="${set('webp')}" sizes="${sizes}">` +
-          `<img src="/images/stills/${name}-720.jpg" srcset="${set('jpg')}" sizes="${sizes}" ` +
+          `<img src="/images/stills/${name}-720.webp" srcset="${set('webp')}" sizes="${sizes}" ` +
           `width="720" height="1280" alt="${alt}" loading="${loading}" decoding="async"${prio}>` +
           `</picture>`
         );
@@ -39,10 +36,16 @@ function stills() {
 export default defineConfig({
   plugins: [stills()],
   build: {
-    outDir: process.env.MB_SINGLE ? 'dist-single' : 'dist',
     target: 'es2019',
     assetsInlineLimit: 0,
-    cssCodeSplit: false,
+    rollupOptions: {
+      input: {
+        main: resolve(import.meta.dirname, 'index.html'),
+        privacy: resolve(import.meta.dirname, 'gizlilik-politikasi.html'),
+        kvkk: resolve(import.meta.dirname, 'kvkk-aydinlatma-metni.html'),
+        notFound: resolve(import.meta.dirname, '404.html'),
+      },
+    },
   },
   server: { host: true },
   preview: { host: true },
