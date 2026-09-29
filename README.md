@@ -12,14 +12,33 @@ npm run dev       # local dev server
 npm run build     # static build → dist/
 npm run preview   # serve the build
 npm run build:inline   # copy-paste variant → dist-inline/ (see below)
+npm run build:single   # the whole site in one file → dist-single/marmara-blue.html
 ```
+
+`build:single` writes ONE html file (about 9 MB) with everything inside: CSS,
+JS, fonts, stills, poster and the film. It opens by double-click, fonts
+included. The film and stills are embedded once and served to the page as
+Blob URLs. The KVKK and privacy drafts open as dialogs. The `<meta>` CSP is
+regenerated with the hashes of its inline blocks.
+
+### GitHub Pages
+
+`.github/workflows/pages.yml` builds and publishes the site on every push to
+the default branch. One-time setup: **Settings → Pages → Source: GitHub
+Actions**. The site is built for `https://<owner>.github.io/<repo>/`; for a
+custom domain, set it under Settings → Pages and add the repository variable
+`CUSTOM_DOMAIN` (Settings → Secrets and variables → Actions → Variables), so
+the build uses `/`. Optional: variable `VITE_GA4_ID`. GitHub Pages cannot send
+HTTP headers, so the build also puts the CSP in a `<meta>` tag; HSTS,
+frame-ancestors and the other headers only apply on Vercel/Netlify/Cloudflare.
 
 `build:inline` writes each page as a single HTML file with its CSS and JS
 inside. Media, fonts and icons stay as separate files next to it, with no
-Base64. All paths are relative, and `_headers`/`vercel.json` are regenerated
-with the SHA-256 hashes of the inline blocks, so the strict CSP still holds.
-Rerun it after any code change. Opened by double-click (`file://`), browsers
-block the web fonts; on any web server everything works.
+Base64. All paths are relative (it runs its own build with base `./`), and
+`_headers`/`vercel.json` are regenerated with the SHA-256 hashes of the
+inline blocks, so the strict CSP still holds. Rerun it after any code change.
+Opened by double-click (`file://`), browsers block the web fonts; on any web
+server everything works.
 
 `dist/` is a static site. Deploy it with Vercel (`vercel.json`), Netlify or
 Cloudflare Pages (`netlify.toml` + `public/_headers`), or any static host.

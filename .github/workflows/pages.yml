@@ -1,0 +1,59 @@
+# Build the site and publish it on GitHub Pages.
+#
+# One-time setup (repository Settings):
+#   1. Pages → Build and deployment → Source: "GitHub Actions".
+#   2. Optional custom domain: Pages → Custom domain → marmara.blue, and add a
+#      repository variable CUSTOM_DOMAIN = marmara.blue (Settings → Secrets and
+#      variables → Actions → Variables). The site is then built for "/";
+#      without it, it is built for https://<owner>.github.io/<repo>/.
+#   3. Optional analytics: repository variable VITE_GA4_ID = G-XXXXXXXXXX.
+#
+# Every push builds; only the default branch is deployed.
+name: GitHub Pages
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: ${{ vars.CUSTOM_DOMAIN != '' && '/' || format('/{0}/', github.event.repository.name) }}
+          VITE_GA4_ID: ${{ vars.VITE_GA4_ID }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    if: github.ref_name == github.event.repository.default_branch
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

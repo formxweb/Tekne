@@ -38,6 +38,14 @@ Site şu an **hiçbir analitik yüklemez**. GA4 kullanılacaksa:
 
 - **Vercel**: repo bağlanınca `vercel.json` build/çıktı/başlıkları ayarlar.
 - **Netlify / Cloudflare Pages**: `netlify.toml` + `public/_headers`.
+- **GitHub Pages**: Settings → Pages → Source: **GitHub Actions**. Ana dala
+  her push'ta `.github/workflows/pages.yml` siteyi derleyip yayınlar
+  (`https://<kullanıcı>.github.io/<repo>/`). Kendi alan adı için Settings →
+  Pages → Custom domain'e alan adını yazın ve `CUSTOM_DOMAIN` adlı bir
+  repository variable ekleyin. GitHub Pages HTTP başlığı gönderemez; CSP
+  `<meta>` etiketiyle gelir, HSTS ve diğer başlıklar orada uygulanmaz.
+- **Tek dosya**: `npm run build:single` → `dist-single/marmara-blue.html`
+  (her şey içinde, ~9 MB; çift tıklayınca açılır).
 - Başka bir sunucu (nginx/Apache): `dist/` klasörünü yayınlayın ve
   `public/_headers` içindeki başlıkları sunucu yapılandırmasına taşıyın.
 - HSTS'e `includeSubDomains`, tüm marmara.blue alt alan adlarının HTTPS

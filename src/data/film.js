@@ -21,6 +21,13 @@ export const STILL_TC = {
   night: '00:00:11:21',
 };
 
-export const FILM_SRC = '/videos/marmara-blue-hero.mp4';
+// BASE_URL is '/' by default and '/<repo>/' on a GitHub Pages project site.
+const BASE = import.meta.env.BASE_URL;
 
-export const still = (name, w = 720) => `/images/stills/${name}-${w}.webp`;
+// The single-file build (scripts/build-single.mjs) embeds the media and
+// resolves these paths through window.MB_ASSETS.
+const asset = (path) => (window.MB_ASSETS && window.MB_ASSETS(path)) || `${BASE}${path}`;
+
+export const FILM_SRC = asset('videos/marmara-blue-hero.mp4');
+
+export const still = (name, w = 720) => asset(`images/stills/${name}-${w}.webp`);
